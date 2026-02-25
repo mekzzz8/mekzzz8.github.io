@@ -1,165 +1,275 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOC_Terminal | J.I. Navarro</title>
+    <title>[JIN] | Cybersecurity Analyst</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Variables y Fuentes */
         :root {
-            --neon-green: #0f0;
-            --dark-bg: #050505;
+            --neon: #22c55e; /* Tailwind green-500 */
+            --bg-dark: #050505;
+            --card-bg: rgba(10, 15, 10, 0.8);
         }
         body {
-            background-color: var(--dark-bg);
-            color: var(--neon-green);
-            font-family: 'Share Tech Mono', monospace;
-            overflow-x: hidden;
+            background-color: var(--bg-dark);
+            color: #d1d5db; /* gray-300 */
+            font-family: 'Inter', sans-serif;
             margin: 0;
+            overflow-x: hidden;
         }
-        h1, h2, .hacker-font { font-family: 'VT323', monospace; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* Efecto CRT (Líneas de monitor antiguo) */
-        .crt::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
-
-        /* Lluvia Matrix de fondo */
+        /* Fondo Matrix Animado */
         canvas {
             display: block;
             position: fixed;
             top: 0;
             left: 0;
             z-index: -1;
-            opacity: 0.15; /* Opacidad baja para que se pueda leer el texto */
+            opacity: 0.08; /* Muy sutil para no molestar la lectura */
         }
 
-        /* Resplandores Neón */
-        .glow-text { text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green); }
-        .glow-box:hover { box-shadow: 0 0 15px var(--neon-green) inset, 0 0 20px var(--neon-green); }
-
-        /* Efecto Glitch para el nombre */
-        .glitch {
-            position: relative;
-            color: white;
-            text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.025em -0.05em 0 rgba(0,255,0,.75), 0.025em 0.05em 0 rgba(0,0,255,.75);
-            animation: glitch 500ms infinite;
+        /* Utilidades UI */
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(34, 197, 94, 0.2);
         }
-        @keyframes glitch {
-            0% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
-            14% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
-            15% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
-            49% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
-            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75); }
-            99% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75); }
-            100% { text-shadow: -0.025em 0 0 rgba(255,0,0,.75), -0.025em -0.025em 0 rgba(0,255,0,.75), -0.025em -0.05em 0 rgba(0,0,255,.75); }
+        .terminal-box {
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.05);
+            border: 1px solid rgba(34, 197, 94, 0.3);
         }
-
-        /* Utilidades de transición */
-        .fade-out { opacity: 0; visibility: hidden; transition: visibility 0s 0.5s, opacity 0.5s linear; }
-        .fade-in { opacity: 1 !important; visibility: visible !important; transition: opacity 1s linear; }
+        .skill-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            transition: all 0.3s ease;
+        }
+        .skill-card:hover {
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.1) inset;
+            transform: translateY(-2px);
+        }
+        .skill-tag {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Animaciones Boot */
+        .fade-out { opacity: 0; visibility: hidden; transition: all 0.5s ease-out; }
+        .fade-in { opacity: 1 !important; visibility: visible !important; transition: opacity 1s ease-in; }
         .blinking { animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
-<body class="crt selection:bg-green-500 selection:text-black">
+<body class="selection:bg-green-500 selection:text-black">
 
     <canvas id="matrix"></canvas>
 
-    <div id="boot-screen" class="fixed inset-0 bg-[#050505] z-50 flex flex-col justify-center items-start p-8 md:p-24">
+    <div id="boot-screen" class="fixed inset-0 bg-[#050505] z-50 flex flex-col justify-center items-start p-8 md:p-24 font-mono">
         <div class="max-w-3xl w-full">
-            <div id="boot-text" class="text-green-500 font-mono text-lg md:text-2xl whitespace-pre-line leading-relaxed"></div>
-            <button id="enter-btn" class="hidden mt-8 px-6 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl font-bold transition-all blinking uppercase" onclick="enterSystem()">
-                > ACCESS SYSTEM [ENTER]
+            <div id="boot-text" class="text-green-500 text-lg md:text-xl whitespace-pre-line leading-relaxed"></div>
+            <button id="enter-btn" class="hidden mt-8 px-6 py-2 border border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl transition-all blinking uppercase" onclick="enterSystem()">
+                > ENTRAR [ENTER]
             </button>
         </div>
     </div>
 
-    <main id="main-content" class="max-w-4xl mx-auto px-6 py-16 opacity-0 invisible relative z-10">
-        
-        <header class="mb-16 border-b-2 border-green-900 pb-8">
-            <p class="text-green-700 mb-2">Login successful. Welcome user.</p>
-            <h1 class="text-5xl md:text-7xl font-bold mb-4 uppercase tracking-wider glitch hacker-font">
-                Jose Ignacio Navarro de Palencia
-            </h1>
-            <p class="text-xl md:text-2xl glow-text hacker-font">> SYSADMIN ASIR | SOC ANALYST (BLUE TEAM)</p>
-        </header>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <nav id="navbar" class="fixed top-0 w-full glass-nav z-40 opacity-0 invisible transition-opacity duration-1000">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-green-500 font-mono text-2xl font-bold tracking-wider">[JIN]</div>
             
-            <section class="border border-green-800 bg-black/60 p-6 glow-box transition-all">
-                <h2 class="text-3xl mb-4 border-b border-green-900 pb-2 glow-text">## WHOAMI</h2>
-                <p class="mb-4 text-gray-300 leading-relaxed">
-                    [+] Target acquired: Professional Cybersecurity Industry.<br>
-                    [+] Current path: ASIR Degree.<br>
-                    [+] Passion: Defensive security, log analysis, and incident response.<br>
-                    [+] Status: Highly motivated. Preparing for SOC operations.
-                </p>
-            </section>
-
-            <section class="border border-green-800 bg-black/60 p-6 glow-box transition-all">
-                <h2 class="text-3xl mb-4 border-b border-green-900 pb-2 glow-text">## CERTIFICATIONS</h2>
-                <ul class="space-y-4">
-                    <li class="flex justify-between items-start">
-                        <div>
-                            <span class="block text-xl text-white">BTL1 (Blue Team Level 1)</span>
-                            <span class="text-sm text-gray-400">SIEM, Phishing, Forensics</span>
-                        </div>
-                        <span class="bg-green-900/50 text-green-400 border border-green-500 px-2 py-1 text-sm blinking">VERIFIED</span>
-                    </li>
-                    <li class="flex justify-between items-start mt-4">
-                        <div>
-                            <span class="block text-xl text-white">HackTheBox (Defensive)</span>
-                            <span class="text-sm text-gray-400">Threat Hunting Path</span>
-                        </div>
-                        <span class="bg-gray-900 text-gray-500 border border-gray-700 px-2 py-1 text-sm">LOADING %</span>
-                    </li>
-                </ul>
-            </section>
-
-            <section class="border border-green-800 bg-black/60 p-6 md:col-span-2 glow-box transition-all">
-                <h2 class="text-3xl mb-4 border-b border-green-900 pb-2 glow-text">## SKILLS & STACK</h2>
-                <div class="flex flex-wrap gap-4 text-lg">
-                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">SIEM / SPLUNK</span>
-                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">PHISHING_ANALYSIS</span>
-                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">INCIDENT_RESPONSE</span>
-                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">LINUX_SERVER</span>
-                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">TCP/IP_NETWORKS</span>
-                </div>
-            </section>
+            <div class="hidden md:flex items-center gap-8 font-mono text-sm tracking-wide">
+                <a href="#inicio" class="text-gray-400 hover:text-green-400 transition-colors">INICIO</a>
+                <a href="#sobre-mi" class="text-gray-400 hover:text-green-400 transition-colors">SOBRE MÍ</a>
+                <a href="#skills" class="text-gray-400 hover:text-green-400 transition-colors">SKILLS</a>
+                <a href="#certs" class="text-gray-400 hover:text-green-400 transition-colors">CERTS</a>
+                <a href="#contacto" class="bg-green-500 text-black px-4 py-2 font-bold hover:bg-green-400 transition-colors rounded-sm">CONTACTO</a>
+            </div>
         </div>
+    </nav>
 
-        <footer class="mt-16 text-center border-t border-green-900 pt-8">
-            <h2 class="text-3xl mb-6 glow-text">## INITIATE_CONNECTION</h2>
-            <a href="mailto:nachonavarro8@gmail.com" class="inline-block px-8 py-4 border-2 border-green-500 text-green-500 text-xl font-bold hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(0,255,0,0.5)]">
-                > EXECUTE EMAIL TO: nachonavarro8@gmail.com
-            </a>
-        </footer>
+    <main id="main-content" class="opacity-0 invisible transition-opacity duration-1000 pt-24 pb-20">
+        
+        <section id="inicio" class="min-h-[85vh] flex flex-col justify-center items-center px-6">
+            
+            <div class="w-full max-w-4xl terminal-box rounded-lg bg-[#0a0a0a] overflow-hidden mb-8">
+                <div class="bg-[#111] px-4 py-3 border-b border-green-900/50 flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    <span class="ml-4 text-xs text-gray-500 font-mono">root@security:~</span>
+                </div>
+                
+                <div class="p-8 md:p-12 font-mono">
+                    <p class="text-green-500 mb-6">$ cat /etc/identity</p>
+                    <h1 class="text-3xl md:text-5xl font-bold text-green-400 mb-6 uppercase tracking-tight">
+                        Jose Ignacio Navarro
+                    </h1>
+                    <p class="text-lg md:text-xl text-green-500 mb-8">$ Cybersecurity Analyst</p>
+                    
+                    <div class="flex flex-wrap items-center gap-3 text-sm md:text-base text-green-600 font-bold">
+                        <span>SOC Analyst</span> 
+                        <span class="text-gray-600">•</span>
+                        <span>Incident Response</span> 
+                        <span class="text-gray-600">•</span>
+                        <span>Blue Team</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4 font-mono text-sm">
+                <a href="#contacto" class="bg-green-500 text-black px-6 py-3 font-bold hover:bg-green-400 transition-colors rounded-sm flex items-center gap-2">
+                    → Contactar
+                </a>
+                <a href="#skills" class="border border-green-500 text-green-500 px-6 py-3 hover:bg-green-900/20 transition-colors rounded-sm flex items-center gap-2">
+                    ♦ Ver Skills
+                </a>
+            </div>
+        </section>
+
+        <section id="sobre-mi" class="max-w-6xl mx-auto px-6 py-20 scroll-mt-20">
+            <h2 class="text-2xl font-mono text-white mb-8">SOBRE MÍ</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="text-gray-400 leading-relaxed space-y-4">
+                    <p>
+                        Estudiante del Grado Superior en Administración de Sistemas Informáticos en Red (ASIR), con una profunda pasión por la ciberseguridad defensiva.
+                    </p>
+                    <p>
+                        Mi objetivo es unirme a un Centro de Operaciones de Seguridad (SOC). Dedico mi tiempo a entrenar en plataformas como HackTheBox y obtener certificaciones que validen mis capacidades en análisis de logs, respuesta a incidentes y caza de amenazas.
+                    </p>
+                </div>
+                
+                <div class="skill-card rounded-lg p-6">
+                    <h3 class="text-lg text-white mb-6 font-mono">IDIOMAS</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+                            <span class="flex items-center gap-3 text-gray-300">🇪🇸 Español</span>
+                            <span class="text-xs font-mono text-green-500">Nativo</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+                            <span class="flex items-center gap-3 text-gray-300">🇬🇧 Inglés</span>
+                            <span class="text-xs font-mono text-green-500">Avanzado</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
+                            <span class="flex items-center gap-3 text-gray-300">🇵🇹 Portugués</span>
+                            <span class="text-xs font-mono text-green-500">Intermedio</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="max-w-6xl mx-auto px-6 py-20 scroll-mt-20">
+            <h2 class="text-2xl font-mono text-white mb-8">SKILLS</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="skill-card rounded-lg p-6 rounded-xl">
+                    <div class="text-2xl mb-4">🔍</div>
+                    <h3 class="text-lg text-white font-medium mb-4">SIEM & Monitoring</h3>
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Splunk</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Wazuh</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Elastic Stack</span>
+                    </div>
+                </div>
+
+                <div class="skill-card rounded-lg p-6 rounded-xl">
+                    <div class="text-2xl mb-4">🛡️</div>
+                    <h3 class="text-lg text-white font-medium mb-4">EDR/XDR & Response</h3>
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Incident Response</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Threat Hunting</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">MITRE ATT&CK</span>
+                    </div>
+                </div>
+
+                <div class="skill-card rounded-lg p-6 rounded-xl">
+                    <div class="text-2xl mb-4">🌐</div>
+                    <h3 class="text-lg text-white font-medium mb-4">Networking & Security</h3>
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">TCP/IP</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Firewall</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Wireshark</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">VPN</span>
+                    </div>
+                </div>
+
+                <div class="skill-card rounded-lg p-6 rounded-xl">
+                    <div class="text-2xl mb-4">🔐</div>
+                    <h3 class="text-lg text-white font-medium mb-4">Identity & Access</h3>
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Active Directory</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">LDAP</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">IAM</span>
+                    </div>
+                </div>
+
+                <div class="skill-card rounded-lg p-6 rounded-xl">
+                    <div class="text-2xl mb-4">☁️</div>
+                    <h3 class="text-lg text-white font-medium mb-4">Cloud Security</h3>
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Microsoft Azure</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Cloud Security</span>
+                    </div>
+                </div>
+
+                <div class="skill-card rounded-lg p-6 rounded-xl">
+                    <div class="text-2xl mb-4">⚡</div>
+                    <h3 class="text-lg text-white font-medium mb-4">Automation & Scripting</h3>
+                    <div class="flex flex-wrap gap-2 font-mono text-xs">
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Bash</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Python</span>
+                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">PowerShell</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certs" class="max-w-6xl mx-auto px-6 py-20 scroll-mt-20">
+            <h2 class="text-2xl font-mono text-white mb-8">CERTIFICACIONES</h2>
+            
+            <div class="skill-card rounded-lg p-8 font-mono">
+                <div class="space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 gap-2">
+                        <span class="text-gray-300">$ BTL1 (Blue Team Level 1)</span>
+                        <span class="text-green-500 text-sm tracking-wider">[COMPLETADO]</span>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 gap-2">
+                        <span class="text-gray-300">$ ASIR (Administración de Sistemas Informáticos en Red)</span>
+                        <span class="text-yellow-500 text-sm tracking-wider">[EN PROCESO]</span>
+                    </div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 gap-2">
+                        <span class="text-gray-300">$ CJCA (Certified Junior Cybersecurity Analyst - HackTheBox)</span>
+                        <span class="text-yellow-500 text-sm tracking-wider">[EN PROCESO]</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="max-w-6xl mx-auto px-6 py-20 mb-20">
+            <div class="terminal-box rounded-lg p-10 text-center bg-green-900/5">
+                <h2 class="text-3xl font-mono text-white mb-4">¿Hablamos?</h2>
+                <p class="text-gray-400 mb-8 max-w-xl mx-auto">Actualmente en búsqueda activa de oportunidades como Analista SOC Junior o posiciones en Blue Team. Mi bandeja de entrada está siempre abierta.</p>
+                <a href="mailto:nachonavarro8@gmail.com" class="inline-block bg-green-500 text-black font-mono font-bold px-8 py-4 rounded-sm hover:bg-green-400 transition-colors">
+                    → Enviar Email
+                </a>
+            </div>
+        </section>
 
     </main>
 
     <script>
-        // --- 1. SCRIPT DE LA PANTALLA DE INICIO ---
+        // 1. ANIMACIÓN DE ARRANQUE (BOOT)
         const bootLines = [
-            "Initializing secure connection...",
-            "Loading defensive modules [OK]",
-            "Establishing tunnel to SOC Mainframe [OK]",
-            "Decrypting payload...",
-            "Checking credentials... ACCESS GRANTED.",
-            "System ready."
+            "Iniciando secuencia de arranque...",
+            "Cargando módulos de interfaz [OK]",
+            "Estableciendo conexión segura [OK]",
+            "Cargando perfil de usuario...",
+            "Sistema listo."
         ];
         
         let lineIndex = 0;
@@ -170,31 +280,30 @@
             if (lineIndex < bootLines.length) {
                 bootTextElement.innerHTML += bootLines[lineIndex] + "<br>";
                 lineIndex++;
-                // Velocidad de aparición de cada línea (rápido para no aburrir)
-                setTimeout(typeBootSequence, 400); 
+                setTimeout(typeBootSequence, 300); 
             } else {
-                // Cuando termina, muestra el botón
-                setTimeout(() => {
-                    enterBtn.classList.remove('hidden');
-                }, 500);
+                setTimeout(() => { enterBtn.classList.remove('hidden'); }, 400);
             }
         }
 
-        // Inicia la secuencia al cargar la página
         window.onload = () => {
-            setTimeout(typeBootSequence, 500);
-            initMatrix(); // Carga el fondo matrix en segundo plano
+            setTimeout(typeBootSequence, 300);
+            initMatrix(); 
         };
 
-        // Función al pulsar ENTER
         function enterSystem() {
+            // Ocultar pantalla negra
             document.getElementById('boot-screen').classList.add('fade-out');
+            
+            // Mostrar contenido y barra de navegación
             setTimeout(() => {
+                document.getElementById('boot-screen').style.display = 'none';
+                document.getElementById('navbar').classList.add('fade-in');
                 document.getElementById('main-content').classList.add('fade-in');
-            }, 500); // Espera a que desaparezca la pantalla negra
+            }, 500); 
         }
 
-        // --- 2. SCRIPT LLUVIA MATRIX ---
+        // 2. LLUVIA MATRIX (Fondo)
         function initMatrix() {
             const canvas = document.getElementById('matrix');
             const ctx = canvas.getContext('2d');
@@ -202,40 +311,31 @@
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
 
-            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン';
-            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const nums = '0123456789';
-            const alphabet = katakana + latin + nums;
-
-            const fontSize = 16;
+            const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const fontSize = 14;
             const columns = canvas.width / fontSize;
             const drops = [];
 
-            for (let x = 0; x < columns; x++) {
-                drops[x] = 1;
-            }
+            for (let x = 0; x < columns; x++) { drops[x] = 1; }
 
             function draw() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.fillStyle = '#0F0';
+                ctx.fillStyle = '#22c55e'; // Verde Tailwind
                 ctx.font = fontSize + 'px monospace';
 
                 for (let i = 0; i < drops.length; i++) {
-                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
                     if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                         drops[i] = 0;
                     }
                     drops[i]++;
                 }
             }
-            setInterval(draw, 30);
+            setInterval(draw, 35);
         }
 
-        // Ajustar matrix si se cambia el tamaño de la ventana
         window.addEventListener('resize', () => {
             const canvas = document.getElementById('matrix');
             canvas.width = window.innerWidth;
