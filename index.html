@@ -63,4 +63,184 @@
             14% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
             15% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
             49% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
-            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05
+            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75); }
+            99% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05em 0 0 rgba(0,255,0,.75), 0 -0.05em 0 rgba(0,0,255,.75); }
+            100% { text-shadow: -0.025em 0 0 rgba(255,0,0,.75), -0.025em -0.025em 0 rgba(0,255,0,.75), -0.025em -0.05em 0 rgba(0,0,255,.75); }
+        }
+
+        /* Utilidades de transición */
+        .fade-out { opacity: 0; visibility: hidden; transition: visibility 0s 0.5s, opacity 0.5s linear; }
+        .fade-in { opacity: 1 !important; visibility: visible !important; transition: opacity 1s linear; }
+        .blinking { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="crt selection:bg-green-500 selection:text-black">
+
+    <canvas id="matrix"></canvas>
+
+    <div id="boot-screen" class="fixed inset-0 bg-[#050505] z-50 flex flex-col justify-center items-start p-8 md:p-24">
+        <div class="max-w-3xl w-full">
+            <div id="boot-text" class="text-green-500 font-mono text-lg md:text-2xl whitespace-pre-line leading-relaxed"></div>
+            <button id="enter-btn" class="hidden mt-8 px-6 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl font-bold transition-all blinking uppercase" onclick="enterSystem()">
+                > ACCESS SYSTEM [ENTER]
+            </button>
+        </div>
+    </div>
+
+    <main id="main-content" class="max-w-4xl mx-auto px-6 py-16 opacity-0 invisible relative z-10">
+        
+        <header class="mb-16 border-b-2 border-green-900 pb-8">
+            <p class="text-green-700 mb-2">Login successful. Welcome user.</p>
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 uppercase tracking-wider glitch hacker-font">
+                Jose Ignacio Navarro de Palencia
+            </h1>
+            <p class="text-xl md:text-2xl glow-text hacker-font">> SYSADMIN ASIR | SOC ANALYST (BLUE TEAM)</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <section class="border border-green-800 bg-black/60 p-6 glow-box transition-all">
+                <h2 class="text-3xl mb-4 border-b border-green-900 pb-2 glow-text">## WHOAMI</h2>
+                <p class="mb-4 text-gray-300 leading-relaxed">
+                    [+] Target acquired: Professional Cybersecurity Industry.<br>
+                    [+] Current path: ASIR Degree.<br>
+                    [+] Passion: Defensive security, log analysis, and incident response.<br>
+                    [+] Status: Highly motivated. Preparing for SOC operations.
+                </p>
+            </section>
+
+            <section class="border border-green-800 bg-black/60 p-6 glow-box transition-all">
+                <h2 class="text-3xl mb-4 border-b border-green-900 pb-2 glow-text">## CERTIFICATIONS</h2>
+                <ul class="space-y-4">
+                    <li class="flex justify-between items-start">
+                        <div>
+                            <span class="block text-xl text-white">BTL1 (Blue Team Level 1)</span>
+                            <span class="text-sm text-gray-400">SIEM, Phishing, Forensics</span>
+                        </div>
+                        <span class="bg-green-900/50 text-green-400 border border-green-500 px-2 py-1 text-sm blinking">VERIFIED</span>
+                    </li>
+                    <li class="flex justify-between items-start mt-4">
+                        <div>
+                            <span class="block text-xl text-white">HackTheBox (Defensive)</span>
+                            <span class="text-sm text-gray-400">Threat Hunting Path</span>
+                        </div>
+                        <span class="bg-gray-900 text-gray-500 border border-gray-700 px-2 py-1 text-sm">LOADING %</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section class="border border-green-800 bg-black/60 p-6 md:col-span-2 glow-box transition-all">
+                <h2 class="text-3xl mb-4 border-b border-green-900 pb-2 glow-text">## SKILLS & STACK</h2>
+                <div class="flex flex-wrap gap-4 text-lg">
+                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">SIEM / SPLUNK</span>
+                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">PHISHING_ANALYSIS</span>
+                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">INCIDENT_RESPONSE</span>
+                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">LINUX_SERVER</span>
+                    <span class="px-4 py-2 border border-green-600 bg-green-900/20 hover:bg-green-500 hover:text-black cursor-crosshair transition-colors">TCP/IP_NETWORKS</span>
+                </div>
+            </section>
+        </div>
+
+        <footer class="mt-16 text-center border-t border-green-900 pt-8">
+            <h2 class="text-3xl mb-6 glow-text">## INITIATE_CONNECTION</h2>
+            <a href="mailto:nachonavarro8@gmail.com" class="inline-block px-8 py-4 border-2 border-green-500 text-green-500 text-xl font-bold hover:bg-green-500 hover:text-black transition-all shadow-[0_0_15px_rgba(0,255,0,0.5)]">
+                > EXECUTE EMAIL TO: nachonavarro8@gmail.com
+            </a>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- 1. SCRIPT DE LA PANTALLA DE INICIO ---
+        const bootLines = [
+            "Initializing secure connection...",
+            "Loading defensive modules [OK]",
+            "Establishing tunnel to SOC Mainframe [OK]",
+            "Decrypting payload...",
+            "Checking credentials... ACCESS GRANTED.",
+            "System ready."
+        ];
+        
+        let lineIndex = 0;
+        const bootTextElement = document.getElementById('boot-text');
+        const enterBtn = document.getElementById('enter-btn');
+
+        function typeBootSequence() {
+            if (lineIndex < bootLines.length) {
+                bootTextElement.innerHTML += bootLines[lineIndex] + "<br>";
+                lineIndex++;
+                // Velocidad de aparición de cada línea (rápido para no aburrir)
+                setTimeout(typeBootSequence, 400); 
+            } else {
+                // Cuando termina, muestra el botón
+                setTimeout(() => {
+                    enterBtn.classList.remove('hidden');
+                }, 500);
+            }
+        }
+
+        // Inicia la secuencia al cargar la página
+        window.onload = () => {
+            setTimeout(typeBootSequence, 500);
+            initMatrix(); // Carga el fondo matrix en segundo plano
+        };
+
+        // Función al pulsar ENTER
+        function enterSystem() {
+            document.getElementById('boot-screen').classList.add('fade-out');
+            setTimeout(() => {
+                document.getElementById('main-content').classList.add('fade-in');
+            }, 500); // Espera a que desaparezca la pantalla negra
+        }
+
+        // --- 2. SCRIPT LLUVIA MATRIX ---
+        function initMatrix() {
+            const canvas = document.getElementById('matrix');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const alphabet = katakana + latin + nums;
+
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+
+            for (let x = 0; x < columns; x++) {
+                drops[x] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0F0';
+                ctx.font = fontSize + 'px monospace';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            setInterval(draw, 30);
+        }
+
+        // Ajustar matrix si se cambia el tamaño de la ventana
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('matrix');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
