@@ -3,93 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jose Ignacio Navarro | Ciberseguridad Defensiva</title>
+    <title>SOC_Terminal | J.I. Navarro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-        
-        /* Animaciones personalizadas */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Variables y Fuentes */
+        :root {
+            --neon-green: #0f0;
+            --dark-bg: #050505;
         }
-        .animate-fade-up {
-            opacity: 0;
-            animation: fadeUp 0.8s ease-out forwards;
+        body {
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            margin: 0;
         }
-        .delay-100 { animation-delay: 0.2s; }
-        .delay-200 { animation-delay: 0.4s; }
-        .delay-300 { animation-delay: 0.6s; }
-        
-        /* Cursor parpadeante para la terminal */
-        .cursor-blink::after {
-            content: '_';
-            animation: blink 1s step-end infinite;
+        h1, h2, .hacker-font { font-family: 'VT323', monospace; }
+
+        /* Efecto CRT (Líneas de monitor antiguo) */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
         }
-        @keyframes blink { 50% { opacity: 0; } }
-    </style>
-</head>
-<body class="bg-[#0a0a0a] text-gray-400 leading-relaxed selection:bg-green-500 selection:text-black">
 
-    <main class="max-w-2xl mx-auto px-6 py-16 md:py-24">
-        
-        <header class="mb-16 animate-fade-up">
-            <h1 class="text-3xl md:text-5xl font-bold text-gray-100 mb-4 tracking-tight">Jose Ignacio Navarro</h1>
-            <p class="text-green-500 font-mono text-sm md:text-base cursor-blink" id="typewriter"></p>
-        </header>
+        /* Lluvia Matrix de fondo */
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.15; /* Opacidad baja para que se pueda leer el texto */
+        }
 
-        <section class="mb-16 animate-fade-up delay-100">
-            <h2 class="text-xl font-semibold text-gray-200 mb-6 border-b border-gray-800 pb-2 flex items-center gap-2">
-                <span class="text-green-500 font-mono text-sm">01.</span> Sobre mí
-            </h2>
-            <div class="space-y-4 hover:text-gray-300 transition-colors duration-300">
-                <p>
-                    Descubrí mi pasión por la ciberseguridad hace unos años y cada día estoy un poco más motivado. 
-                    Mi objetivo principal es entrar en el mundillo profesional, específicamente en roles de <span class="text-green-400 font-semibold">SOC (Security Operations Center)</span>.
-                </p>
-                <p>
-                    Actualmente curso el Grado Superior en Administración de Sistemas Informáticos en Red (ASIR) y dedico 
-                    mi tiempo libre a obtener certificaciones prácticas que validen mis conocimientos en el lado defensivo (Blue Team).
-                </p>
-            </div>
-        </section>
+        /* Resplandores Neón */
+        .glow-text { text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green); }
+        .glow-box:hover { box-shadow: 0 0 15px var(--neon-green) inset, 0 0 20px var(--neon-green); }
 
-        <section class="mb-16 animate-fade-up delay-200">
-            <h2 class="text-xl font-semibold text-gray-200 mb-6 border-b border-gray-800 pb-2 flex items-center gap-2">
-                <span class="text-green-500 font-mono text-sm">02.</span> Certificaciones
-            </h2>
-            <ul class="space-y-4">
-                <li class="p-4 rounded-lg border border-gray-800 bg-gray-900/50 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:-translate-y-1 transition-all duration-300 cursor-default">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-gray-100 font-medium text-lg">BTL1 (Blue Team Level 1)</span>
-                        <span class="text-xs font-mono bg-green-500/10 text-green-400 px-2 py-1 rounded border border-green-500/20">Completado</span>
-                    </div>
-                    <p class="text-sm">Certificación práctica enfocada en respuesta a incidentes, análisis de phishing, SIEM y forense digital.</p>
-                </li>
-                <li class="p-4 rounded-lg border border-gray-800 bg-gray-900/50 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:-translate-y-1 transition-all duration-300 cursor-default">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-gray-100 font-medium text-lg">HackTheBox (Defensive)</span>
-                        <span class="text-xs font-mono bg-gray-800 text-gray-400 px-2 py-1 rounded">En preparación</span>
-                    </div>
-                    <p class="text-sm">Preparación continua para fortalecer mis habilidades en análisis de logs y caza de amenazas (Threat Hunting).</p>
-                </li>
-            </ul>
-        </section>
-
-        <section class="mb-16 animate-fade-up delay-300">
-            <h2 class="text-xl font-semibold text-gray-200 mb-6 border-b border-gray-800 pb-2 flex items-center gap-2">
-                <span class="text-green-500 font-mono text-sm">03.</span> Habilidades Técnicas
-            </h2>
-            <div class="flex flex-wrap gap-3">
-                <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-md text-sm font-mono text-gray-300 hover:text-black hover:bg-green-500 hover:border-green-500 transition-all duration-300 cursor-crosshair">SIEM</span>
-                <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-md text-sm font-mono text-gray-300 hover:text-black hover:bg-green-500 hover:border-green-500 transition-all duration-300 cursor-crosshair">Phishing Analysis</span>
-                <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-md text-sm font-mono text-gray-300 hover:text-black hover:bg-green-500 hover:border-green-500 transition-all duration-300 cursor-crosshair">Incident Response</span>
-                <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-md text-sm font-mono text-gray-300 hover:text-black hover:bg-green-500 hover:border-green-500 transition-all duration-300 cursor-crosshair">Linux / Windows Server</span>
-                <span class="px-3 py-1.5 bg-[#111] border border-gray-800 rounded-md text-sm font-mono text-gray-300 hover:text-black hover:bg-green-500 hover:border-green-500 transition-all duration-300 cursor-crosshair">Redes TCP/IP</span>
-            </div>
-        </section>
-
-        <section class="animate-fade-up delay-300">
-            <h2 class="text-xl font-semibold text-gray-200 mb-6 border-b border-gray-800 pb-2 flex items
+        /* Efecto Glitch para el nombre */
+        .glitch {
+            position: relative;
+            color: white;
+            text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.025em -0.05em 0 rgba(0,255,0,.75), 0.025em 0.05em 0 rgba(0,0,255,.75);
+            animation: glitch 500ms infinite;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
+            14% { text-shadow: 0.05em 0 0 rgba(255,0,0,.75), -0.05em -0.025em 0 rgba(0,255,0,.75), -0.025em 0.05em 0 rgba(0,0,255,.75); }
+            15% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
+            49% { text-shadow: -0.05em -0.025em 0 rgba(255,0,0,.75), 0.025em 0.025em 0 rgba(0,255,0,.75), -0.05em -0.05em 0 rgba(0,0,255,.75); }
+            50% { text-shadow: 0.025em 0.05em 0 rgba(255,0,0,.75), 0.05
