@@ -3,58 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[JIN] | Cybersecurity Analyst</title>
+    <title>[JIN] | SOC Analyst Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --neon: #22c55e; /* Tailwind green-500 */
             --bg-dark: #050505;
-            --card-bg: rgba(10, 15, 10, 0.8);
+            --term-bg: rgba(12, 12, 12, 0.9);
         }
         body {
             background-color: var(--bg-dark);
             color: #d1d5db; /* gray-300 */
-            font-family: 'Inter', sans-serif;
+            font-family: 'JetBrains Mono', monospace; /* Fuente mono para todo */
             margin: 0;
             overflow-x: hidden;
         }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
 
-        /* Fondo Matrix Animado */
+        /* Fondo Matrix Animado - MÁS VISIBLE */
         canvas {
             display: block;
             position: fixed;
             top: 0;
             left: 0;
             z-index: -1;
-            opacity: 0.08; /* Muy sutil para no molestar la lectura */
+            /* CAMBIO 1: Opacidad subida de 0.08 a 0.15 */
+            opacity: 0.15; 
         }
 
-        /* Utilidades UI */
+        /* Utilidades UI - Estilo Terminal Rígido */
         .glass-nav {
-            background: rgba(5, 5, 5, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+            background: rgba(5, 5, 5, 0.9);
+            border-bottom: 2px solid var(--neon);
         }
-        .terminal-box {
-            box-shadow: 0 0 30px rgba(34, 197, 94, 0.05);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-        .skill-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(34, 197, 94, 0.1);
+        
+        /* NUEVO ESTILO: Ventana de Terminal */
+        .terminal-window {
+            background-color: var(--term-bg);
+            border: 1px solid var(--neon);
+            /* Bordes rectos, sin redondear */
+            border-radius: 0; 
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+            overflow: hidden;
             transition: all 0.3s ease;
         }
-        .skill-card:hover {
-            border-color: rgba(34, 197, 94, 0.5);
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.1) inset;
-            transform: translateY(-2px);
+        .terminal-window:hover {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+            border-color: #4ade80; /* Un verde un poco más claro al pasar el ratón */
         }
+
+        /* Barra de título de las ventanas */
+        .terminal-bar {
+            background: #1a1a1a;
+            border-bottom: 1px solid var(--neon);
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            color: var(--neon);
+            display: flex;
+            align-items: center;
+        }
+        .terminal-bar::before {
+            content: "🔴 🟡 🟢"; /* Botones falsos de ventana */
+            filter: grayscale(0.5);
+            margin-right: 1rem;
+            font-size: 0.6rem;
+        }
+
         .skill-tag {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--neon);
+            color: var(--neon);
         }
         
         /* Animaciones Boot */
@@ -71,205 +90,251 @@
     <div id="boot-screen" class="fixed inset-0 bg-[#050505] z-50 flex flex-col justify-center items-start p-8 md:p-24 font-mono">
         <div class="max-w-3xl w-full">
             <div id="boot-text" class="text-green-500 text-lg md:text-xl whitespace-pre-line leading-relaxed"></div>
-            <button id="enter-btn" class="hidden mt-8 px-6 py-2 border border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl transition-all blinking uppercase" onclick="enterSystem()">
-                > ENTRAR [ENTER]
+            <button id="enter-btn" class="hidden mt-8 px-6 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl transition-all blinking uppercase font-bold" onclick="enterSystem()">
+                > EJECUTAR SISTEMA [ENTER]
             </button>
         </div>
     </div>
 
     <nav id="navbar" class="fixed top-0 w-full glass-nav z-40 opacity-0 invisible transition-opacity duration-1000">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-green-500 font-mono text-2xl font-bold tracking-wider">[JIN]</div>
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="text-green-500 text-xl font-bold tracking-wider">root@JIN-SOC:~#</div>
             
-            <div class="hidden md:flex items-center gap-8 font-mono text-sm tracking-wide">
-                <a href="#inicio" class="text-gray-400 hover:text-green-400 transition-colors">INICIO</a>
-                <a href="#sobre-mi" class="text-gray-400 hover:text-green-400 transition-colors">SOBRE MÍ</a>
-                <a href="#skills" class="text-gray-400 hover:text-green-400 transition-colors">SKILLS</a>
-                <a href="#certs" class="text-gray-400 hover:text-green-400 transition-colors">CERTS</a>
-                <a href="#contacto" class="bg-green-500 text-black px-4 py-2 font-bold hover:bg-green-400 transition-colors rounded-sm">CONTACTO</a>
+            <div class="hidden md:flex items-center gap-6 text-sm tracking-wide">
+                <a href="#inicio" class="hover:text-green-400 transition-colors">< Inicio ></a>
+                <a href="#sobre-mi" class="hover:text-green-400 transition-colors">< Sobre_Mí ></a>
+                <a href="#skills" class="hover:text-green-400 transition-colors">< Skills ></a>
+                <a href="#certs" class="hover:text-green-400 transition-colors">< Certs ></a>
             </div>
+            <a href="#contacto" class="bg-green-600 text-black px-4 py-1 font-bold hover:bg-green-400 transition-colors text-sm">
+                [ CONTACTAR ]
+            </a>
         </div>
     </nav>
 
     <main id="main-content" class="opacity-0 invisible transition-opacity duration-1000 pt-24 pb-20">
         
-        <section id="inicio" class="min-h-[85vh] flex flex-col justify-center items-center px-6">
+        <section id="inicio" class="min-h-[80vh] flex flex-col justify-center items-center px-4">
             
-            <div class="w-full max-w-4xl terminal-box rounded-lg bg-[#0a0a0a] overflow-hidden mb-8">
-                <div class="bg-[#111] px-4 py-3 border-b border-green-900/50 flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
-                    <span class="ml-4 text-xs text-gray-500 font-mono">root@security:~</span>
+            <div class="w-full max-w-4xl terminal-window mb-8">
+                <div class="terminal-bar">
+                    [ root@soc-box:~/user/identity ]
                 </div>
                 
-                <div class="p-8 md:p-12 font-mono">
-                    <p class="text-green-500 mb-6">$ cat /etc/identity</p>
-                    <h1 class="text-3xl md:text-5xl font-bold text-green-400 mb-6 uppercase tracking-tight">
-                        Jose Ignacio Navarro
+                <div class="p-8 md:p-12">
+                    <p class="text-green-500 mb-4">$ whoami</p>
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 uppercase tracking-tight glitch-effect">
+                        JOSE IGNACIO NAVARRO
                     </h1>
-                    <p class="text-lg md:text-xl text-green-500 mb-8">$ Cybersecurity Analyst</p>
+                    <p class="text-xl text-green-400 mb-8">> Analista de Ciberseguridad Defensiva</p>
                     
-                    <div class="flex flex-wrap items-center gap-3 text-sm md:text-base text-green-600 font-bold">
-                        <span>SOC Analyst</span> 
-                        <span class="text-gray-600">•</span>
-                        <span>Incident Response</span> 
-                        <span class="text-gray-600">•</span>
-                        <span>Blue Team</span>
+                    <div class="text-gray-400 border-l-2 border-green-800 pl-4 py-2 mb-8">
+                        <p>Target: SOC Operations (Blue Team)</p>
+                        <p>Focus: Incident Response · SIEM · Threat Hunting</p>
+                    </div>
+
+                    <div class="flex gap-4 text-sm">
+                        <a href="#contacto" class="bg-green-600 text-black px-6 py-3 font-bold hover:bg-green-500 transition-colors flex items-center gap-2">
+                            ./contactar.sh
+                        </a>
+                        <a href="#skills" class="border border-green-500 text-green-500 px-6 py-3 hover:bg-green-900/30 transition-colors flex items-center gap-2">
+                            cat skills.txt
+                        </a>
                     </div>
                 </div>
             </div>
-
-            <div class="flex gap-4 font-mono text-sm">
-                <a href="#contacto" class="bg-green-500 text-black px-6 py-3 font-bold hover:bg-green-400 transition-colors rounded-sm flex items-center gap-2">
-                    → Contactar
-                </a>
-                <a href="#skills" class="border border-green-500 text-green-500 px-6 py-3 hover:bg-green-900/20 transition-colors rounded-sm flex items-center gap-2">
-                    ♦ Ver Skills
-                </a>
-            </div>
         </section>
 
-        <section id="sobre-mi" class="max-w-6xl mx-auto px-6 py-20 scroll-mt-20">
-            <h2 class="text-2xl font-mono text-white mb-8">SOBRE MÍ</h2>
+        <section id="sobre-mi" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+            <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">SOBRE_MÍ</h2>
             
-            <div class="grid md:grid-cols-2 gap-8 items-start">
-                <div class="text-gray-400 leading-relaxed space-y-4">
-                    <p>
-                        Estudiante del Grado Superior en Administración de Sistemas Informáticos en Red (ASIR), con una profunda pasión por la ciberseguridad defensiva.
-                    </p>
-                    <p>
-                        Mi objetivo es unirme a un Centro de Operaciones de Seguridad (SOC). Dedico mi tiempo a entrenar en plataformas como HackTheBox y obtener certificaciones que validen mis capacidades en análisis de logs, respuesta a incidentes y caza de amenazas.
-                    </p>
+            <div class="grid md:grid-cols-3 gap-6 items-start">
+                <div class="terminal-window md:col-span-2 h-full">
+                    <div class="terminal-bar">[ user@soc:~/bio/readme.md ]</div>
+                    <div class="p-6 text-gray-300 leading-relaxed space-y-4">
+                        <p>
+                            <span class="text-green-500">$ cat bio.txt</span><br>
+                            Estudiante del Grado Superior en Administración de Sistemas Informáticos en Red (ASIR), enfocado 100% en la seguridad defensiva.
+                        </p>
+                        <p>
+                            Mi objetivo es unirme a un equipo de SOC. Dedico mi tiempo libre a "romper y arreglar" laboratorios en HackTheBox y a estudiar cómo los atacantes operan para defender mejor los sistemas.
+                        </p>
+                        <div class="text-xs text-green-800 mt-4">
+                            ========================================<br>
+                            END OF FILE<br>
+                            ========================================
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="skill-card rounded-lg p-6">
-                    <h3 class="text-lg text-white mb-6 font-mono">IDIOMAS</h3>
+                <div class="terminal-window">
+                    <div class="terminal-bar">[ user@soc:~/config/locale ]</div>
+                    <div class="p-6">
+                        <h3 class="text-lg text-green-400 mb-4">$ locale -a</h3>
+                        <div class="space-y-4 text-sm">
+                            <div>
+                                <div class="flex justify-between mb-1"><span>[🇪🇸] Español</span> <span class="text-green-500">NATIVO</span></div>
+                                <div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-full"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1"><span>[🇬🇧] Inglés</span> <span class="text-green-500">AVANZADO (C1)</span></div>
+                                <div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-[85%]"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1"><span>[🇵🇹] Portugués</span> <span class="text-green-500">INTERMEDIO (B1)</span></div>
+                                <div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-[50%]"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+             <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">TECHNICAL_SKILLS</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="terminal-window">
+                    <div class="terminal-bar">[ root@soc:~/skills/defensive ]</div>
+                    <div class="p-6 space-y-6">
+                        
+                        <div>
+                            <h3 class="text-green-400 mb-2 flex items-center gap-2">
+                                <span class="text-xs">[DIR]</span> SIEM & Monitoring
+                            </h3>
+                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                                <span class="skill-tag px-2 py-1">Splunk</span>
+                                <span class="skill-tag px-2 py-1">Wazuh (ELK)</span>
+                                <span class="skill-tag px-2 py-1">Log Analysis</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-green-400 mb-2 flex items-center gap-2">
+                                <span class="text-xs">[DIR]</span> Incident Response
+                            </h3>
+                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                                <span class="skill-tag px-2 py-1">Triage & Containment</span>
+                                <span class="skill-tag px-2 py-1">Digital Forensics Basics</span>
+                                <span class="skill-tag px-2 py-1">Phishing Analysis</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-green-400 mb-2 flex items-center gap-2">
+                                <span class="text-xs">[DIR]</span> Threat Intelligence
+                            </h3>
+                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                                <span class="skill-tag px-2 py-1">MITRE ATT&CK Framework</span>
+                                <span class="skill-tag px-2 py-1">IOC Gathering</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="terminal-window">
+                    <div class="terminal-bar">[ root@soc:~/skills/infrastructure ]</div>
+                    <div class="p-6 space-y-6">
+                        
+                        <div>
+                            <h3 class="text-green-400 mb-2 flex items-center gap-2">
+                                <span class="text-xs">[DIR]</span> Networking & Security
+                            </h3>
+                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                                <span class="skill-tag px-2 py-1">Wireshark / TCPdump</span>
+                                <span class="skill-tag px-2 py-1">Firewall Rules (iptables)</span>
+                                <span class="skill-tag px-2 py-1">VPN / Tunneling</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-green-400 mb-2 flex items-center gap-2">
+                                <span class="text-xs">[DIR]</span> SysAdmin (ASIR Core)
+                            </h3>
+                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                                <span class="skill-tag px-2 py-1">Linux Hardening</span>
+                                <span class="skill-tag px-2 py-1">Windows Server AD</span>
+                                <span class="skill-tag px-2 py-1">Bash Scripting</span>
+                            </div>
+                        </div>
+
+                         <div>
+                            <h3 class="text-green-400 mb-2 flex items-center gap-2">
+                                <span class="text-xs">[DIR]</span> Cloud Basics
+                            </h3>
+                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                                <span class="skill-tag px-2 py-1">Azure Fundamentals</span>
+                                <span class="skill-tag px-2 py-1">Docker Containers</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certs" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+             <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">CERT_STATUS</h2>
+            
+            <div class="terminal-window p-0">
+                <div class="terminal-bar">[ user@soc:~/certs/check_status.sh ]</div>
+                <div class="p-6 font-mono text-sm">
+                    <div class="mb-4 text-gray-500">$ ./check_certs.sh --all</div>
+                    
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-                            <span class="flex items-center gap-3 text-gray-300">🇪🇸 Español</span>
-                            <span class="text-xs font-mono text-green-500">Nativo</span>
+                        <div class="flex items-start gap-4">
+                            <span class="text-green-500 font-bold">[OK]</span>
+                            <div>
+                                <p class="text-white font-bold">BTL1 (Blue Team Level 1)</p>
+                                <p class="text-gray-400 text-xs">Security Blue Team | ID: XXXXXX</p>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-                            <span class="flex items-center gap-3 text-gray-300">🇬🇧 Inglés</span>
-                            <span class="text-xs font-mono text-green-500">Avanzado</span>
+                        <div class="flex items-start gap-4">
+                            <span class="text-yellow-500 font-bold blink-slow">[RUN]</span>
+                            <div>
+                                <p class="text-white font-bold">ASIR (Grado Superior)</p>
+                                <p class="text-gray-400 text-xs">Administración de Sistemas Informáticos en Red | En curso</p>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center border-b border-gray-800 pb-2">
-                            <span class="flex items-center gap-3 text-gray-300">🇵🇹 Portugués</span>
-                            <span class="text-xs font-mono text-green-500">Intermedio</span>
+                        <div class="flex items-start gap-4">
+                            <span class="text-yellow-500 font-bold blink-slow">[RUN]</span>
+                            <div>
+                                <p class="text-white font-bold">CJCA (Certified Junior Cybersecurity Analyst)</p>
+                                <p class="text-gray-400 text-xs">HackTheBox | Preparación activa</p>
+                            </div>
                         </div>
                     </div>
+                    <div class="mt-6 text-green-800 text-xs">Process finished with exit code 0</div>
                 </div>
             </div>
         </section>
 
-        <section id="skills" class="max-w-6xl mx-auto px-6 py-20 scroll-mt-20">
-            <h2 class="text-2xl font-mono text-white mb-8">SKILLS</h2>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="skill-card rounded-lg p-6 rounded-xl">
-                    <div class="text-2xl mb-4">🔍</div>
-                    <h3 class="text-lg text-white font-medium mb-4">SIEM & Monitoring</h3>
-                    <div class="flex flex-wrap gap-2 font-mono text-xs">
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Splunk</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Wazuh</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Elastic Stack</span>
-                    </div>
+        <section id="contacto" class="max-w-4xl mx-auto px-4 py-20 mb-20">
+            <div class="terminal-window border-green-500/50">
+                <div class="terminal-bar bg-green-900/20">[ root@soc:~/net/establish_connection ]</div>
+                <div class="p-8 text-center">
+                    <h2 class="text-2xl text-green-400 mb-4">$ ping -c 1 nachonavarro8.host</h2>
+                    <p class="text-gray-300 mb-8 max-w-xl mx-auto">
+                        PING nachonavarro8 (127.0.0.1): 56 data bytes<br>
+                        64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.045 ms<br><br>
+                        Buscando oportunidades como Analista SOC Junior. <br>¿Conectamos?
+                    </p>
+                    <a href="mailto:nachonavarro8@gmail.com" class="inline-block bg-green-600 text-black font-bold px-8 py-4 hover:bg-green-500 transition-colors blinking">
+                        > INICIAR HANDSHAKE (EMAIL) <
+                    </a>
                 </div>
-
-                <div class="skill-card rounded-lg p-6 rounded-xl">
-                    <div class="text-2xl mb-4">🛡️</div>
-                    <h3 class="text-lg text-white font-medium mb-4">EDR/XDR & Response</h3>
-                    <div class="flex flex-wrap gap-2 font-mono text-xs">
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Incident Response</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Threat Hunting</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">MITRE ATT&CK</span>
-                    </div>
-                </div>
-
-                <div class="skill-card rounded-lg p-6 rounded-xl">
-                    <div class="text-2xl mb-4">🌐</div>
-                    <h3 class="text-lg text-white font-medium mb-4">Networking & Security</h3>
-                    <div class="flex flex-wrap gap-2 font-mono text-xs">
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">TCP/IP</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Firewall</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Wireshark</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">VPN</span>
-                    </div>
-                </div>
-
-                <div class="skill-card rounded-lg p-6 rounded-xl">
-                    <div class="text-2xl mb-4">🔐</div>
-                    <h3 class="text-lg text-white font-medium mb-4">Identity & Access</h3>
-                    <div class="flex flex-wrap gap-2 font-mono text-xs">
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Active Directory</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">LDAP</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">IAM</span>
-                    </div>
-                </div>
-
-                <div class="skill-card rounded-lg p-6 rounded-xl">
-                    <div class="text-2xl mb-4">☁️</div>
-                    <h3 class="text-lg text-white font-medium mb-4">Cloud Security</h3>
-                    <div class="flex flex-wrap gap-2 font-mono text-xs">
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Microsoft Azure</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Cloud Security</span>
-                    </div>
-                </div>
-
-                <div class="skill-card rounded-lg p-6 rounded-xl">
-                    <div class="text-2xl mb-4">⚡</div>
-                    <h3 class="text-lg text-white font-medium mb-4">Automation & Scripting</h3>
-                    <div class="flex flex-wrap gap-2 font-mono text-xs">
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Bash</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">Python</span>
-                        <span class="skill-tag px-3 py-1.5 rounded-md text-gray-300">PowerShell</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="certs" class="max-w-6xl mx-auto px-6 py-20 scroll-mt-20">
-            <h2 class="text-2xl font-mono text-white mb-8">CERTIFICACIONES</h2>
-            
-            <div class="skill-card rounded-lg p-8 font-mono">
-                <div class="space-y-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 gap-2">
-                        <span class="text-gray-300">$ BTL1 (Blue Team Level 1)</span>
-                        <span class="text-green-500 text-sm tracking-wider">[COMPLETADO]</span>
-                    </div>
-                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 gap-2">
-                        <span class="text-gray-300">$ ASIR (Administración de Sistemas Informáticos en Red)</span>
-                        <span class="text-yellow-500 text-sm tracking-wider">[EN PROCESO]</span>
-                    </div>
-                    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-gray-800 pb-4 gap-2">
-                        <span class="text-gray-300">$ CJCA (Certified Junior Cybersecurity Analyst - HackTheBox)</span>
-                        <span class="text-yellow-500 text-sm tracking-wider">[EN PROCESO]</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="max-w-6xl mx-auto px-6 py-20 mb-20">
-            <div class="terminal-box rounded-lg p-10 text-center bg-green-900/5">
-                <h2 class="text-3xl font-mono text-white mb-4">¿Hablamos?</h2>
-                <p class="text-gray-400 mb-8 max-w-xl mx-auto">Actualmente en búsqueda activa de oportunidades como Analista SOC Junior o posiciones en Blue Team. Mi bandeja de entrada está siempre abierta.</p>
-                <a href="mailto:nachonavarro8@gmail.com" class="inline-block bg-green-500 text-black font-mono font-bold px-8 py-4 rounded-sm hover:bg-green-400 transition-colors">
-                    → Enviar Email
-                </a>
             </div>
         </section>
 
     </main>
 
     <script>
-        // 1. ANIMACIÓN DE ARRANQUE (BOOT)
         const bootLines = [
-            "Iniciando secuencia de arranque...",
-            "Cargando módulos de interfaz [OK]",
-            "Estableciendo conexión segura [OK]",
-            "Cargando perfil de usuario...",
-            "Sistema listo."
+            "Iniciando secuencia de arranque KERNEL...",
+            "Montando sistemas de archivos [OK]",
+            "Cargando módulos de seguridad defensiva [OK]",
+            "Estableciendo túnel cifrado al SOC [OK]",
+            "Verificando integridad del usuario...",
+            "ACCESO CONCEDIDO."
         ];
         
         let lineIndex = 0;
@@ -280,7 +345,7 @@
             if (lineIndex < bootLines.length) {
                 bootTextElement.innerHTML += bootLines[lineIndex] + "<br>";
                 lineIndex++;
-                setTimeout(typeBootSequence, 300); 
+                setTimeout(typeBootSequence, 250); 
             } else {
                 setTimeout(() => { enterBtn.classList.remove('hidden'); }, 400);
             }
@@ -292,10 +357,7 @@
         };
 
         function enterSystem() {
-            // Ocultar pantalla negra
             document.getElementById('boot-screen').classList.add('fade-out');
-            
-            // Mostrar contenido y barra de navegación
             setTimeout(() => {
                 document.getElementById('boot-screen').style.display = 'none';
                 document.getElementById('navbar').classList.add('fade-in');
@@ -303,44 +365,39 @@
             }, 500); 
         }
 
-        // 2. LLUVIA MATRIX (Fondo)
+        // LLUVIA MATRIX CON MÁS OPACIDAD
         function initMatrix() {
             const canvas = document.getElementById('matrix');
             const ctx = canvas.getContext('2d');
-
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-
-            const chars = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const chars = '01FETJINASIRBTL1SOC';
             const fontSize = 14;
             const columns = canvas.width / fontSize;
             const drops = [];
-
             for (let x = 0; x < columns; x++) { drops[x] = 1; }
-
             function draw() {
                 ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#22c55e'; // Verde Tailwind
+                ctx.fillStyle = '#22c55e';
                 ctx.font = fontSize + 'px monospace';
-
                 for (let i = 0; i < drops.length; i++) {
                     const text = chars.charAt(Math.floor(Math.random() * chars.length));
                     ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
                     drops[i]++;
                 }
             }
             setInterval(draw, 35);
         }
-
         window.addEventListener('resize', () => {
             const canvas = document.getElementById('matrix');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
     </script>
+    <style>
+        .blink-slow { animation: blink 2s step-end infinite; }
+    </style>
 </body>
 </html>
