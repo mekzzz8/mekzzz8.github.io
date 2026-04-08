@@ -94,11 +94,11 @@
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="text-green-500 text-xl font-bold tracking-wider">root@JIN-SOC:~#</div>
             <div class="hidden md:flex items-center gap-6 text-sm tracking-wide">
-                <a href="#inicio" class="hover:text-green-400">< Inicio ></a>
-                <a href="#sobre-mi" class="hover:text-green-400">< Sobre_Mí ></a>
-                <a href="#proyectos" class="hover:text-green-400">< Proyectos ></a>
-                <a href="#skills" class="hover:text-green-400">< Skills ></a>
-                <a href="#certs" class="hover:text-green-400">< Certs ></a>
+                <a href="#inicio" class="hover:text-green-400 transition-colors">< Inicio ></a>
+                <a href="#sobre-mi" class="hover:text-green-400 transition-colors">< Sobre_Mí ></a>
+                <a href="#proyectos" class="hover:text-green-400 transition-colors">< Proyectos ></a>
+                <a href="#skills" class="hover:text-green-400 transition-colors">< Skills ></a>
+                <a href="#certs" class="hover:text-green-400 transition-colors">< Certs ></a>
             </div>
             <a href="#contacto" class="bg-green-600 text-black px-4 py-1 font-bold hover:bg-green-400 transition-colors text-sm">[ CONTACTAR ]</a>
         </div>
@@ -186,33 +186,17 @@
                                 <span class="skill-tag text-white px-2 py-1">Log Analysis</span>
                             </div>
                         </div>
-                        <div>
-                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> Incident Response</h3>
-                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
-                                <span class="skill-tag text-white px-2 py-1">Triage & Containment</span>
-                                <span class="skill-tag text-white px-2 py-1">Phishing Analysis</span>
-                                <span class="skill-tag text-white px-2 py-1">Digital Forensics Basics</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="terminal-window">
                     <div class="terminal-bar">[ root@soc:~/skills/infrastructure ]</div>
                     <div class="p-6 space-y-6">
                         <div>
-                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> SysAdmin (ASIR)</h3>
+                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> SysAdmin</h3>
                             <div class="flex flex-wrap gap-2 pl-6 text-xs">
                                 <span class="skill-tag text-white px-2 py-1">Linux Hardening</span>
                                 <span class="skill-tag text-white px-2 py-1">Windows Server AD</span>
                                 <span class="skill-tag text-white px-2 py-1">Bash Scripting</span>
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> Networking</h3>
-                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
-                                <span class="skill-tag text-white px-2 py-1">Wireshark / TCPdump</span>
-                                <span class="skill-tag text-white px-2 py-1">Firewall Rules</span>
-                                <span class="skill-tag text-white px-2 py-1">VPN / Tunneling</span>
                             </div>
                         </div>
                     </div>
@@ -226,10 +210,14 @@
                 <div class="terminal-bar">[ user@soc:~/certs/check_status.sh ]</div>
                 <div class="p-6 font-mono text-sm">
                     <div class="space-y-4">
-                        <div class="flex items-start gap-4"><span class="text-green-500 font-bold">[OK]</span><div><p class="text-white font-bold">BTL1 (Blue Team Level 1)</p><p class="text-gray-400 text-xs">Security Blue Team | ID: Validated</p></div></div>
-                        <div class="flex items-start gap-4"><span class="text-yellow-500 font-bold blink-slow">[RUN]</span><div><p class="text-white font-bold">ASIR (Grado Superior)</p><p class="text-gray-400 text-xs">Administración de Sistemas Informáticos | En curso</p></div></div>
-                        <div class="flex items-start gap-4"><span class="text-yellow-500 font-bold blink-slow">[RUN]</span><div><p class="text-white font-bold">CJCA (Certified Junior Cybersecurity Analyst)</p><p class="text-gray-400 text-xs">HackTheBox | Preparación activa</p></div></div>
-                    </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-green-500 font-bold">[OK]</span>
+                            <div>
+                                <p class="text-white font-bold">BTL1 (Blue Team Level 1)</p>
+                                <p class="text-gray-400 text-xs">Security Blue Team</p>
+                            </div>
+                        </div>
+                        </div>
                 </div>
             </div>
         </section>
