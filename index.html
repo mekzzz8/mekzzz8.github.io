@@ -6,7 +6,6 @@
     <title>[JIN] | SOC Analyst Terminal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
     <style>
         :root {
             --neon: #22c55e;
@@ -16,17 +15,16 @@
         body {
             background-color: var(--bg-dark);
             color: #d1d5db;
-            font-family: 'JetBrains Mono', monospace; 
+            font-family: 'JetBrains Mono', monospace;
             margin: 0;
             overflow-x: hidden;
         }
         canvas {
             display: block;
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             z-index: -1;
-            opacity: 0.15; 
+            opacity: 0.15;
         }
         .glass-nav {
             background: rgba(5, 5, 5, 0.9);
@@ -40,7 +38,7 @@
         }
         .terminal-window:hover {
             box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
-            border-color: #4ade80; 
+            border-color: #4ade80;
         }
         .terminal-bar {
             background: #1a1a1a;
@@ -52,7 +50,7 @@
             align-items: center;
         }
         .terminal-bar::before {
-            content: "🔴 🟡 🟢"; 
+            content: "🔴 🟡 🟢";
             filter: grayscale(0.5);
             margin-right: 1rem;
             font-size: 0.6rem;
@@ -71,218 +69,335 @@
             transform: translateY(-5px);
         }
         .fade-out { opacity: 0; visibility: hidden; transition: all 0.5s ease-out; }
-        .fade-in { opacity: 1 !important; visibility: visible !important; transition: opacity 1s ease-in; }
+        .fade-in  { opacity: 1 !important; visibility: visible !important; transition: opacity 1s ease-in; }
         .blinking { animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        .blink-slow { animation: blink 2s step-end infinite; }
+
+        .badge-blue   { background: rgba(59,130,246,0.15);  color: #60a5fa; border: 1px solid #3b82f6; }
+        .badge-purple { background: rgba(139,92,246,0.15);  color: #a78bfa; border: 1px solid #8b5cf6; }
+        .badge-orange { background: rgba(249,115,22,0.15);  color: #fb923c; border: 1px solid #f97316; }
+        .badge-red    { background: rgba(239,68,68,0.15);   color: #f87171; border: 1px solid #ef4444; }
     </style>
 </head>
 <body class="selection:bg-green-500 selection:text-black">
 
-    <canvas id="matrix"></canvas>
+<canvas id="matrix"></canvas>
 
-    <div id="boot-screen" class="fixed inset-0 bg-[#050505] z-50 flex flex-col justify-center items-start p-8 md:p-24 font-mono">
-        <div class="max-w-3xl w-full">
-            <div id="boot-text" class="text-green-500 text-lg md:text-xl whitespace-pre-line leading-relaxed"></div>
-            <button id="enter-btn" class="hidden mt-8 px-6 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl transition-all blinking uppercase font-bold" onclick="enterSystem()">
-                > EJECUTAR SISTEMA [ENTER]
-            </button>
-        </div>
+<!-- BOOT SCREEN -->
+<div id="boot-screen" class="fixed inset-0 bg-[#050505] z-50 flex flex-col justify-center items-start p-8 md:p-24 font-mono">
+    <div class="max-w-3xl w-full">
+        <div id="boot-text" class="text-green-500 text-lg md:text-xl whitespace-pre-line leading-relaxed"></div>
+        <button id="enter-btn" class="hidden mt-8 px-6 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-black text-xl transition-all blinking uppercase font-bold" onclick="enterSystem()">
+            > EJECUTAR SISTEMA [ENTER]
+        </button>
     </div>
+</div>
 
-    <nav id="navbar" class="fixed top-0 w-full glass-nav z-40 opacity-0 invisible transition-opacity duration-1000">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="text-green-500 text-xl font-bold tracking-wider">root@JIN-SOC:~#</div>
-            <div class="hidden md:flex items-center gap-6 text-sm tracking-wide">
-                <a href="#inicio" class="hover:text-green-400 transition-colors">< Inicio ></a>
-                <a href="#sobre-mi" class="hover:text-green-400 transition-colors">< Sobre_Mí ></a>
-                <a href="#proyectos" class="hover:text-green-400 transition-colors">< Proyectos ></a>
-                <a href="#skills" class="hover:text-green-400 transition-colors">< Skills ></a>
-                <a href="#certs" class="hover:text-green-400 transition-colors">< Certs ></a>
-            </div>
-            <a href="#contacto" class="bg-green-600 text-black px-4 py-1 font-bold hover:bg-green-400 transition-colors text-sm">[ CONTACTAR ]</a>
+<!-- NAV -->
+<nav id="navbar" class="fixed top-0 w-full glass-nav z-40 opacity-0 invisible transition-opacity duration-1000">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="text-green-500 text-xl font-bold tracking-wider">root@JIN-SOC:~#</div>
+        <div class="hidden md:flex items-center gap-6 text-sm tracking-wide">
+            <a href="#inicio"    class="hover:text-green-400 transition-colors">&lt; Inicio &gt;</a>
+            <a href="#sobre-mi"  class="hover:text-green-400 transition-colors">&lt; Sobre_Mí &gt;</a>
+            <a href="#proyectos" class="hover:text-green-400 transition-colors">&lt; Proyectos &gt;</a>
+            <a href="#skills"    class="hover:text-green-400 transition-colors">&lt; Skills &gt;</a>
+            <a href="#certs"     class="hover:text-green-400 transition-colors">&lt; Certs &gt;</a>
         </div>
-    </nav>
+        <a href="#contacto" class="bg-green-600 text-black px-4 py-1 font-bold hover:bg-green-400 transition-colors text-sm">[ CONTACTAR ]</a>
+    </div>
+</nav>
 
-    <main id="main-content" class="opacity-0 invisible transition-opacity duration-1000 pt-24 pb-20">
-        
-        <section id="inicio" class="min-h-[80vh] flex flex-col justify-center items-center px-4">
-            <div class="w-full max-w-4xl terminal-window mb-8">
-                <div class="terminal-bar">[ root@soc-box:~/user/identity ]</div>
-                <div class="p-8 md:p-12">
-                    <p class="text-green-500 mb-4">$ whoami</p>
-                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 uppercase tracking-tight">JOSE IGNACIO NAVARRO</h1>
-                    <p class="text-xl text-green-400 mb-8">> Analista de Ciberseguridad Defensiva</p>
-                    <div class="text-gray-400 border-l-2 border-green-800 pl-4 py-2 mb-8">
-                        <p>Target: SOC Operations (Blue Team)</p>
-                        <p>Focus: Incident Response · SIEM · Threat Hunting</p>
-                    </div>
-                    <div class="flex gap-4 text-sm">
-                        <a href="#contacto" class="bg-green-600 text-black px-6 py-3 font-bold hover:bg-green-500 transition-colors flex items-center gap-2">./contactar.sh</a>
-                        <a href="#proyectos" class="border border-green-500 text-green-500 px-6 py-3 hover:bg-green-900/30 transition-colors flex items-center gap-2">ls -la ./proyectos</a>
-                    </div>
+<main id="main-content" class="opacity-0 invisible transition-opacity duration-1000 pt-24 pb-20">
+
+    <!-- HERO -->
+    <section id="inicio" class="min-h-[80vh] flex flex-col justify-center items-center px-4">
+        <div class="w-full max-w-4xl terminal-window mb-8">
+            <div class="terminal-bar">[ root@soc-box:~/user/identity ]</div>
+            <div class="p-8 md:p-12">
+                <p class="text-green-500 mb-4">$ whoami</p>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 uppercase tracking-tight">JOSE IGNACIO NAVARRO</h1>
+                <p class="text-xl text-green-400 mb-8">> Analista de Ciberseguridad Defensiva</p>
+                <div class="text-gray-400 border-l-2 border-green-800 pl-4 py-2 mb-8">
+                    <p>Target: SOC Operations (Blue Team)</p>
+                    <p>Focus: Incident Response · SIEM · Threat Hunting</p>
+                </div>
+                <div class="flex gap-4 text-sm flex-wrap">
+                    <a href="#contacto"  class="bg-green-600 text-black px-6 py-3 font-bold hover:bg-green-500 transition-colors">./contactar.sh</a>
+                    <a href="#proyectos" class="border border-green-500 text-green-500 px-6 py-3 hover:bg-green-900/30 transition-colors">ls -la ./proyectos</a>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="sobre-mi" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
-            <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">SOBRE_MÍ</h2>
-            <div class="grid md:grid-cols-3 gap-6 items-start">
-                <div class="terminal-window md:col-span-2 h-full">
-                    <div class="terminal-bar">[ user@soc:~/bio/readme.md ]</div>
-                    <div class="p-6 text-gray-300 leading-relaxed space-y-4">
-                        <p><span class="text-green-500">$ cat bio.txt</span><br>Estudiante de ASIR enfocado en seguridad defensiva. Mi objetivo es unirme a un equipo de SOC para aplicar conocimientos técnicos en entornos reales.</p>
-                        <p>Dedico mi tiempo a laboratorios de infraestructura y a estudiar metodologías de ataque para diseñar mejores defensas.</p>
-                    </div>
+    <!-- SOBRE MÍ -->
+    <section id="sobre-mi" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+        <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">SOBRE_MÍ</h2>
+        <div class="grid md:grid-cols-3 gap-6 items-start">
+            <div class="terminal-window md:col-span-2 h-full">
+                <div class="terminal-bar">[ user@soc:~/bio/readme.md ]</div>
+                <div class="p-6 text-gray-300 leading-relaxed space-y-4">
+                    <p><span class="text-green-500">$ cat bio.txt</span><br>Estudiante de ASIR enfocado en seguridad defensiva. Mi objetivo es unirme a un equipo de SOC para aplicar conocimientos técnicos en entornos reales.</p>
+                    <p>Dedico mi tiempo a laboratorios de infraestructura y a estudiar metodologías de ataque para diseñar mejores defensas.</p>
                 </div>
-                <div class="terminal-window h-full">
-                    <div class="terminal-bar">[ user@soc:~/config/locale ]</div>
-                    <div class="p-6">
-                        <h3 class="text-lg text-green-400 mb-4">$ locale -a</h3>
-                        <div class="space-y-4 text-sm">
-                            <div><div class="flex justify-between mb-1"><span>Español</span> <span class="text-green-500">NATIVO</span></div><div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-full"></div></div></div>
-                            <div><div class="flex justify-between mb-1"><span>Inglés</span> <span class="text-green-500">C1</span></div><div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-[85%]"></div></div></div>
+            </div>
+            <div class="terminal-window h-full">
+                <div class="terminal-bar">[ user@soc:~/config/locale ]</div>
+                <div class="p-6">
+                    <h3 class="text-lg text-green-400 mb-4">$ locale -a</h3>
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <div class="flex justify-between mb-1"><span>Español</span><span class="text-green-500">NATIVO</span></div>
+                            <div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-full"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1"><span>Inglés</span><span class="text-green-500">C1</span></div>
+                            <div class="h-1 w-full bg-gray-800"><div class="h-1 bg-green-500 w-[85%]"></div></div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section id="proyectos" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
-            <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">LABS_PROYECTOS</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="project-card p-8 flex flex-col justify-between">
+    <!-- PROYECTOS -->
+    <section id="proyectos" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+        <h2 class="text-2xl text-green-500 mb-2 flex items-center before:content-['#_'] before:mr-2">LABS_PROYECTOS</h2>
+        <p class="text-gray-600 text-xs mb-8 font-mono">$ ls -la ./labs/ &nbsp;|&nbsp; 4 proyectos encontrados</p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+
+            <!-- 1. Active Directory -->
+            <div class="project-card p-8 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] badge-blue px-2 py-0.5 font-bold uppercase">Windows Server</span>
+                        <span class="text-green-500 font-bold text-xs">ESTADO: COMPLETO</span>
+                    </div>
+                    <h3 class="text-2xl text-white font-bold mb-3">Active Directory Lab</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">Laboratorio de gestión de identidades y Troubleshooting Dual. Documentación técnica sobre resolución de tickets comunes en entornos corporativos mediante GUI y PowerShell.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-[10px]">
+                        <span class="skill-tag text-white px-2 py-0.5">Active Directory</span>
+                        <span class="skill-tag text-white px-2 py-0.5">PowerShell</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Windows Server</span>
+                        <span class="skill-tag text-white px-2 py-0.5">GPO</span>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <a href="https://mekzzz8.github.io/Active-Directory-/" target="_blank" class="bg-green-600 text-black px-4 py-2 font-bold hover:bg-green-400 transition-all text-xs">[ VER_DEMO ]</a>
+                    <a href="https://github.com/mekzzz8/Active-Directory-" target="_blank" class="border border-gray-600 text-gray-400 px-4 py-2 font-bold hover:text-white hover:border-white transition-all text-xs">GITHUB_REPO</a>
+                </div>
+            </div>
+
+            <!-- 2. SOC Log Analyzer -->
+            <div class="project-card p-8 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] badge-purple px-2 py-0.5 font-bold uppercase">Blue Team · SOC</span>
+                        <span class="text-green-500 font-bold text-xs">ESTADO: COMPLETO</span>
+                    </div>
+                    <h3 class="text-2xl text-white font-bold mb-3">SOC Log Analyzer</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">Laboratorio interactivo de análisis de alertas SOC. 8 alertas reales con logs, metodología de investigación paso a paso y distinción entre verdaderos positivos y falsos positivos.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-[10px]">
+                        <span class="skill-tag text-white px-2 py-0.5">Log Analysis</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Incident Response</span>
+                        <span class="skill-tag text-white px-2 py-0.5">SIEM</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Threat Hunting</span>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <a href="https://mekzzz8.github.io/SOC-Log-Analyzer/" target="_blank" class="bg-green-600 text-black px-4 py-2 font-bold hover:bg-green-400 transition-all text-xs">[ VER_DEMO ]</a>
+                    <a href="https://github.com/mekzzz8/SOC-Log-Analyzer" target="_blank" class="border border-gray-600 text-gray-400 px-4 py-2 font-bold hover:text-white hover:border-white transition-all text-xs">GITHUB_REPO</a>
+                </div>
+            </div>
+
+            <!-- 3. Wazuh Lab -->
+            <div class="project-card p-8 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] badge-orange px-2 py-0.5 font-bold uppercase">SIEM · EDR</span>
+                        <span class="text-green-500 font-bold text-xs">ESTADO: COMPLETO</span>
+                    </div>
+                    <h3 class="text-2xl text-white font-bold mb-3">Wazuh SIEM Lab</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">Despliegue y configuración de Wazuh como plataforma SIEM/EDR. Detección de amenazas, correlación de eventos, reglas personalizadas y respuesta activa a incidentes.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-[10px]">
+                        <span class="skill-tag text-white px-2 py-0.5">Wazuh</span>
+                        <span class="skill-tag text-white px-2 py-0.5">ELK Stack</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Linux</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Alerting</span>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <a href="https://mekzzz8.github.io/WAZUH-LAB/" target="_blank" class="bg-green-600 text-black px-4 py-2 font-bold hover:bg-green-400 transition-all text-xs">[ VER_DEMO ]</a>
+                    <a href="https://github.com/mekzzz8/WAZUH-LAB" target="_blank" class="border border-gray-600 text-gray-400 px-4 py-2 font-bold hover:text-white hover:border-white transition-all text-xs">GITHUB_REPO</a>
+                </div>
+            </div>
+
+            <!-- 4. Phishing Lab -->
+            <div class="project-card p-8 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[10px] badge-red px-2 py-0.5 font-bold uppercase">Threat Intel · Red/Blue</span>
+                        <span class="text-green-500 font-bold text-xs">ESTADO: COMPLETO</span>
+                    </div>
+                    <h3 class="text-2xl text-white font-bold mb-3">Phishing Analysis Lab</h3>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">Laboratorio de análisis de campañas de phishing. Disección de emails maliciosos, análisis de cabeceras, identificación de IOCs y procedimiento de respuesta ante incidentes.</p>
+                    <div class="flex flex-wrap gap-2 mb-6 text-[10px]">
+                        <span class="skill-tag text-white px-2 py-0.5">Phishing Analysis</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Email Forensics</span>
+                        <span class="skill-tag text-white px-2 py-0.5">IOC Extraction</span>
+                        <span class="skill-tag text-white px-2 py-0.5">Threat Intel</span>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <a href="https://mekzzz8.github.io/Phishing-Lab/" target="_blank" class="bg-green-600 text-black px-4 py-2 font-bold hover:bg-green-400 transition-all text-xs">[ VER_DEMO ]</a>
+                    <a href="https://github.com/mekzzz8/Phishing-Lab" target="_blank" class="border border-gray-600 text-gray-400 px-4 py-2 font-bold hover:text-white hover:border-white transition-all text-xs">GITHUB_REPO</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+        <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">TECHNICAL_SKILLS</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="terminal-window">
+                <div class="terminal-bar">[ root@soc:~/skills/defensive ]</div>
+                <div class="p-6 space-y-6">
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] bg-blue-900/30 text-blue-400 border border-blue-500 px-2 py-0.5 font-bold uppercase">Windows Server</span>
-                            <span class="text-green-500 font-bold text-xs">ESTADO: COMPLETO</span>
-                        </div>
-                        <h3 class="text-2xl text-white font-bold mb-4">Active Directory Lab</h3>
-                        <p class="text-sm text-gray-400 mb-6 leading-relaxed">Laboratorio de gestión de identidades y Troubleshooting Dual. Documentación técnica sobre resolución de tickets comunes en entornos corporativos mediante GUI y PowerShell.</p>
-                    </div>
-                    <div class="flex gap-4">
-                        <a href="https://mekzzz8.github.io/Active-Directory-/" target="_blank" class="bg-green-600 text-black px-4 py-2 font-bold hover:bg-green-400 transition-all text-xs">[ VER_DEMO ]</a>
-                        <a href="https://github.com/mekzzz8/Active-Directory-" target="_blank" class="border border-gray-600 text-gray-400 px-4 py-2 font-bold hover:text-white hover:border-white transition-all text-xs">GITHUB_REPO</a>
-                    </div>
-                </div>
-                <div class="border border-dashed border-gray-800 p-8 flex flex-col justify-center items-center text-center">
-                    <p class="text-gray-600 italic text-sm">Próximo laboratorio en despliegue...</p>
-                    <div class="mt-4 text-xs text-gray-700 font-mono">STATUS: [PENDING_UPDATE]</div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
-             <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">TECHNICAL_SKILLS</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="terminal-window">
-                    <div class="terminal-bar">[ root@soc:~/skills/defensive ]</div>
-                    <div class="p-6 space-y-6">
-                        <div>
-                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> SIEM & Monitoring</h3>
-                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
-                                <span class="skill-tag text-white px-2 py-1">Splunk</span>
-                                <span class="skill-tag text-white px-2 py-1">Wazuh (ELK)</span>
-                                <span class="skill-tag text-white px-2 py-1">Log Analysis</span>
-                            </div>
+                        <h3 class="text-white font-bold mb-3 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> SIEM &amp; Monitoring</h3>
+                        <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                            <span class="skill-tag text-white px-2 py-1">Splunk</span>
+                            <span class="skill-tag text-white px-2 py-1">Wazuh (ELK)</span>
+                            <span class="skill-tag text-white px-2 py-1">Log Analysis</span>
                         </div>
                     </div>
-                </div>
-                <div class="terminal-window">
-                    <div class="terminal-bar">[ root@soc:~/skills/infrastructure ]</div>
-                    <div class="p-6 space-y-6">
-                        <div>
-                            <h3 class="text-white font-bold mb-2 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> SysAdmin</h3>
-                            <div class="flex flex-wrap gap-2 pl-6 text-xs">
-                                <span class="skill-tag text-white px-2 py-1">Linux Hardening</span>
-                                <span class="skill-tag text-white px-2 py-1">Windows Server AD</span>
-                                <span class="skill-tag text-white px-2 py-1">Bash Scripting</span>
-                            </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-3 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> Incident Response</h3>
+                        <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                            <span class="skill-tag text-white px-2 py-1">Phishing Analysis</span>
+                            <span class="skill-tag text-white px-2 py-1">IOC Extraction</span>
+                            <span class="skill-tag text-white px-2 py-1">Email Forensics</span>
+                            <span class="skill-tag text-white px-2 py-1">Threat Hunting</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section id="certs" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
-             <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">CERT_STATUS</h2>
-            <div class="terminal-window p-0">
-                <div class="terminal-bar">[ user@soc:~/certs/check_status.sh ]</div>
-                <div class="p-6 font-mono text-sm">
-                    <div class="space-y-4">
-                        <div class="flex items-start gap-4">
-                            <span class="text-green-500 font-bold">[OK]</span>
-                            <div>
-                                <p class="text-white font-bold">BTL1 (Blue Team Level 1)</p>
-                                <p class="text-gray-400 text-xs">Security Blue Team</p>
-                            </div>
+            <div class="terminal-window">
+                <div class="terminal-bar">[ root@soc:~/skills/infrastructure ]</div>
+                <div class="p-6 space-y-6">
+                    <div>
+                        <h3 class="text-white font-bold mb-3 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> SysAdmin</h3>
+                        <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                            <span class="skill-tag text-white px-2 py-1">Linux Hardening</span>
+                            <span class="skill-tag text-white px-2 py-1">Windows Server AD</span>
+                            <span class="skill-tag text-white px-2 py-1">Bash Scripting</span>
+                            <span class="skill-tag text-white px-2 py-1">PowerShell</span>
                         </div>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-3 flex items-center gap-2"><span class="text-green-500 text-xs font-normal">[DIR]</span> Frameworks</h3>
+                        <div class="flex flex-wrap gap-2 pl-6 text-xs">
+                            <span class="skill-tag text-white px-2 py-1">MITRE ATT&amp;CK</span>
+                            <span class="skill-tag text-white px-2 py-1">Cyber Kill Chain</span>
+                            <span class="skill-tag text-white px-2 py-1">NIST</span>
                         </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="max-w-4xl mx-auto px-4 py-20 mb-20">
-            <div class="terminal-window border-green-500/50">
-                <div class="terminal-bar bg-green-900/20">[ root@soc:~/net/establish_connection ]</div>
-                <div class="p-8 text-center">
-                    <h2 class="text-2xl text-green-400 mb-4">$ ping -c 1 nachonavarro8.host</h2>
-                    <div class="inline-block border border-green-500 bg-[#0a0a0a] text-green-500 font-bold px-8 py-4 text-xl md:text-2xl select-all cursor-text shadow-[0_0_15px_rgba(34,197,94,0.1)]">
-                        > nachonavarro8@gmail.com <span class="blinking font-normal">_</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
+    <!-- CERTS -->
+    <section id="certs" class="max-w-6xl mx-auto px-4 py-20 scroll-mt-20">
+        <h2 class="text-2xl text-green-500 mb-6 flex items-center before:content-['#_'] before:mr-2">CERT_STATUS</h2>
+        <div class="terminal-window p-0">
+            <div class="terminal-bar">[ user@soc:~/certs/check_status.sh ]</div>
+            <div class="p-6 font-mono text-sm space-y-4">
+                <div class="flex items-start gap-4">
+                    <span class="text-green-500 font-bold shrink-0">[OK]</span>
+                    <div>
+                        <p class="text-white font-bold">BTL1 — Blue Team Level 1</p>
+                        <p class="text-gray-400 text-xs">Security Blue Team</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script>
-        const bootLines = ["Iniciando secuencia de arranque KERNEL...", "Montando sistemas de archivos [OK]", "Cargando módulos de seguridad defensiva [OK]", "Estableciendo túnel cifrado al SOC [OK]", "ACCESO CONCEDIDO."];
-        let lineIndex = 0;
-        const bootTextElement = document.getElementById('boot-text');
-        const enterBtn = document.getElementById('enter-btn');
-        function typeBootSequence() {
-            if (lineIndex < bootLines.length) {
-                bootTextElement.innerHTML += bootLines[lineIndex] + "<br>";
-                lineIndex++;
-                setTimeout(typeBootSequence, 250); 
-            } else {
-                setTimeout(() => { enterBtn.classList.remove('hidden'); }, 400);
-            }
+    <!-- CONTACTO -->
+    <section id="contacto" class="max-w-4xl mx-auto px-4 py-20 mb-20">
+        <div class="terminal-window border-green-500/50">
+            <div class="terminal-bar bg-green-900/20">[ root@soc:~/net/establish_connection ]</div>
+            <div class="p-8 text-center">
+                <h2 class="text-2xl text-green-400 mb-4">$ ping -c 1 nachonavarro8.host</h2>
+                <div class="inline-block border border-green-500 bg-[#0a0a0a] text-green-500 font-bold px-8 py-4 text-xl md:text-2xl select-all cursor-text shadow-[0_0_15px_rgba(34,197,94,0.1)]">
+                    > nachonavarro8@gmail.com <span class="blinking font-normal">_</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    const bootLines = [
+        "Iniciando secuencia de arranque KERNEL...",
+        "Montando sistemas de archivos [OK]",
+        "Cargando módulos de seguridad defensiva [OK]",
+        "Estableciendo túnel cifrado al SOC [OK]",
+        "Cargando 4 laboratorios activos [OK]",
+        "ACCESO CONCEDIDO."
+    ];
+    let lineIndex = 0;
+    const bootTextEl = document.getElementById('boot-text');
+    const enterBtn   = document.getElementById('enter-btn');
+
+    function typeBootSequence() {
+        if (lineIndex < bootLines.length) {
+            bootTextEl.innerHTML += bootLines[lineIndex] + "<br>";
+            lineIndex++;
+            setTimeout(typeBootSequence, 250);
+        } else {
+            setTimeout(() => enterBtn.classList.remove('hidden'), 400);
         }
-        window.onload = () => { setTimeout(typeBootSequence, 300); initMatrix(); };
-        function enterSystem() {
-            document.getElementById('boot-screen').classList.add('fade-out');
-            setTimeout(() => {
-                document.getElementById('boot-screen').style.display = 'none';
-                document.getElementById('navbar').classList.add('fade-in');
-                document.getElementById('main-content').classList.add('fade-in');
-            }, 500); 
+    }
+
+    window.onload = () => { setTimeout(typeBootSequence, 300); initMatrix(); };
+
+    function enterSystem() {
+        document.getElementById('boot-screen').classList.add('fade-out');
+        setTimeout(() => {
+            document.getElementById('boot-screen').style.display = 'none';
+            document.getElementById('navbar').classList.add('fade-in');
+            document.getElementById('main-content').classList.add('fade-in');
+        }, 500);
+    }
+
+    function initMatrix() {
+        const canvas = document.getElementById('matrix');
+        const ctx    = canvas.getContext('2d');
+        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        resize();
+        window.addEventListener('resize', resize);
+        const chars    = '01FETJINASIRBTL1SOC';
+        const fontSize = 14;
+        const drops    = Array.from({ length: Math.ceil(canvas.width / fontSize) }, () => 1);
+        function draw() {
+            ctx.fillStyle = 'rgba(5,5,5,0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#22c55e';
+            ctx.font = fontSize + 'px monospace';
+            drops.forEach((y, i) => {
+                const ch = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(ch, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
         }
-        function initMatrix() {
-            const canvas = document.getElementById('matrix');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const chars = '01FETJINASIRBTL1SOC';
-            const fontSize = 14;
-            const columns = canvas.width / fontSize;
-            const drops = [];
-            for (let x = 0; x < columns; x++) { drops[x] = 1; }
-            function draw() {
-                ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#22c55e';
-                ctx.font = fontSize + 'px monospace';
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
-                    drops[i]++;
-                }
-            }
-            setInterval(draw, 35);
-        }
-    </script>
+        setInterval(draw, 35);
+    }
+</script>
 </body>
 </html>
